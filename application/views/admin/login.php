@@ -79,27 +79,23 @@
 							<div class="headerLogin">Silakan Login</div>	
 							<?php echo $this->session->flashdata("k"); ?>
 							<table align="center" style="margin-bottom: 0" class="table-form" width="90%">
-								<tr><td width="40%">Username</td><td><input type="text" autofocus name="u" required style="width: 200px" autofocus class="form-control"></td></tr>
-								<tr><td>Password</td><td><input type="password" name="p" required style="width: 200px" class="form-control"></td></tr>
-								<tr><td>Tahun</td><td><select name="ta" class="form-control" required><option value="">--</option>
-									<?php 
-										for ($i = 2012; $i <= (date('Y')); $i++) {
-											if (date('Y') == $i) {
-												echo "<option value='$i' selected>$i</option>";
-												} else {
-												echo "<option value='$i'>$i</option>";
-											}
-										}
-									?>
-								</select>
-								</td></tr>
+								<tr>
+									<td width="40%">Username</td>
+									<td>
+										<input type="text" autofocus name="u" required style="width: 200px" autofocus class="form-control">
+									</td>
+								</tr>
+								<tr>
+									<td>Password</td>
+									<td>
+										<input type="password" name="p" required style="width: 200px" class="form-control">
+									</td>
+								</tr>
 								<tr>
 									<td></td>
 									<td><input type="submit" class="btn btn-success" value="Login"></td>
 								</tr>
-								
 							</table>
-							
 						</form>
 					</div><!--/span-->
 				</div><!--/row-->
