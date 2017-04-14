@@ -50,19 +50,10 @@ $unReportCount = $queryUnReported->num_rows();
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes"><i class="icon-th-list icon-white"> </i> Master <span class="caret"></span></a>
 					<ul class="dropdown-menu" aria-labelledby="themes">
 						<li>
-							<a tabindex="-1" href="<?php echo base_url(); ?>klasifikasi_surat/klas_surat">Klasifikasi Surat</a>
+							<a tabindex="-1" href="<?php echo base_url(); ?>kader/index">Data Kader</a>
 						</li>
 						<li>
-							<a tabindex="-2" href="<?php echo base_url(); ?>referensi/sifat_surat">Sifat Surat</a>
-						</li>
-						<li>
-							<a tabindex="-2" href="<?php echo base_url(); ?>referensi/pengirim">Pengirim Surat</a>
-						</li>
-						<li>
-							<a tabindex="-2" href="<?php echo base_url(); ?>referensi/ref_disposisi">Tujuan Disposisi Surat</a>
-						</li>
-						<li>
-							<a tabindex="-2" href="<?php echo base_url(); ?>referensi/pelaksanaan_intruksi">Pelaksanaan Instruksi</a>
+							<a tabindex="-1" href="<?php echo base_url(); ?>pasien/index">Data Pasien</a>
 						</li>
 					</ul>
 				</li>
