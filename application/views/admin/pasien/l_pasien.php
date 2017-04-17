@@ -40,11 +40,12 @@
 			<table  class="display table table-bordered table-striped table-condensed table-hover" id="example">
 				<thead>
 					<tr>
-						<th width="30%">Nama</th>
-						<th width="20%">Umur</th>
-						<th width="20%">Telepon</th>
+						<th width="20%">Nama</th>
+						<th width="10%">Umur</th>
+						<th width="10%">Telepon</th>
 						<th width="10%">RW</th>
-						<th width="10%">Aksi</th>
+						<th width="10%">Status</th>
+						<th width="15%">Aksi</th>
 					</tr>
 				</thead>
 				
@@ -61,6 +62,18 @@
 								<td><?php echo $b->age; ?> tahun</td>
 								<td><?php echo $b->phoneNumber; ?></td>
 								<td><?php echo $b->rw; ?></td>
+								<td>
+	                                <span <?php
+	                                $status = "Sakit";
+	                                if (($b->status == 0) || (is_null($b->status))) {
+	                                    echo "class='label label-danger'";
+	                                } else {
+	                                	$status = "Sembuh";
+	                                    echo "class='label label-success'";
+	                                }
+	                                ?>><?php echo $status; ?>
+	                                </span>
+	                            </td>
 								
 								<?php 
 									if ($this->session->userdata('admin_level') == "Super Admin") {

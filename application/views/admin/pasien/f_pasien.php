@@ -41,19 +41,19 @@ if ($mode == "edt" || $mode == "act_edt") {
             <tr>
                 <td width="20%">Umur</td>
                 <td>
-                    <input type="text" name="age" required value="<?php echo $age; ?>" style="width: 700px" class="form-control" autofocus>
+                    <input type="text" name="age" required value="<?php echo $age; ?>" style="width: 700px" class="form-control">
                 </td>
             </tr>
             <tr>
                 <td width="20%">Telepon</td>
                 <td>
-                    <input type="text" name="phoneNumber" required value="<?php echo $phoneNumber; ?>" style="width: 700px" class="form-control" autofocus>
+                    <input type="text" name="phoneNumber" required value="<?php echo $phoneNumber; ?>" style="width: 700px" class="form-control">
                 </td>
             </tr>
             <tr>
                 <td width="20%">RW</td>
                 <td>
-                    <input type="text" name="rw" required value="<?php echo $rw; ?>" style="width: 700px" class="form-control" autofocus>
+                    <input type="text" name="rw" required value="<?php echo $rw; ?>" style="width: 700px" class="form-control">
                 </td>
             </tr>
         </table>

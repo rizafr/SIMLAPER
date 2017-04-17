@@ -16,35 +16,12 @@ $unReportCount = $queryUnReported->num_rows();
 		</div>
 		<div class="navbar-collapse collapse" id="navbar-main">
 			<ul class="nav navbar-nav">	
-				<li><a href="<?php echo base_url(); ?>admin"><i class="icon-home icon-white"> </i> Beranda</a></li>
-				<div class="nav notify-row" id="top_menu">
-					<!--  notification start -->
-					<ul class="nav top-menu">              
-						<!-- notification dropdown start-->
-						<li id="header_notification_bar" class="dropdown">
-							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-
-								<i class="icon-envelope icon-white"></i>
-								<span class="badge bg-important"><?= $countSuratMasukNotReported+$countSuratBelumDisposisi; ?></span>
-							</a>
-							<ul class="dropdown-menu extended notification">
-								<div class="notify-arrow notify-arrow-red"></div>
-								<li>
-									<p class="red">Ada <?= $countSuratMasukNotReported; ?> surat yang belum ditindaklanjuti atau belum ada laporan</p>
-								</li>
-								<li>
-									<p class="red">Ada <?= $countSuratBelumDisposisi; ?> surat yang belum disposisi</p>
-								</li>
-								<li>
-									<a href="<?php echo base_url(); ?>surat_masuk/masuk">
-										<i class="fa fa-eye"></i> Lihat
-									</a>
-								</li>
-							</ul>
-						</li>
-						<!-- notification dropdown end -->
-					</ul>
-				</div>
+				<li>
+					<a href="<?php echo base_url(); ?>admin">
+					<i class="icon-home icon-white"></i> 
+						Beranda
+					</a>
+				</li>
 
 				<li class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes"><i class="icon-th-list icon-white"> </i> Master <span class="caret"></span></a>
@@ -55,38 +32,8 @@ $unReportCount = $queryUnReported->num_rows();
 						<li>
 							<a tabindex="-1" href="<?php echo base_url(); ?>pasien/index">Data Pasien</a>
 						</li>
-					</ul>
-				</li>
-				<li class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes"><i class="icon-random icon-white"> </i> Manajemen Surat <span class="caret"></span></a>
-					<ul class="dropdown-menu" aria-labelledby="themes">
 						<li>
-							<a tabindex="-1" href="<?php echo base_url(); ?>surat_masuk/masuk">Surat Masuk</a>
-						</li>
-						<!-- 	<li><a tabindex="-1" href="<?php echo base_url(); ?>surat_keluar/keluar">Surat Keluar</a></li> -->
-					</ul>
-				</li>
-				<li class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes"><i class="icon-file icon-white"> </i> Laporan <span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu" aria-labelledby="themes">
-						<li>
-							<a tabindex="-1" href="<?php echo base_url(); ?>laporan/laporan_surat_masuk">Pertanggal</a>
-						</li>
-						<li>
-							<a tabindex="-1" href="<?php echo base_url(); ?>laporan/laporan_klasifikasi_surat">Perklasifikasi Surat</a>
-						</li>
-						<li>
-							<a tabindex="-1" href="<?php echo base_url(); ?>laporan/laporan_sifat_surat">Sifat Surat</a>
-						</li>
-						<li>
-							<a tabindex="-1" href="<?php echo base_url(); ?>laporan/laporan_pengirim_surat">Pengirim Surat</a>
-						</li>
-						<li>
-							<a tabindex="-1" href="<?php echo base_url(); ?>laporan/laporan_tujuan_disposisi">Tujuan disposisi</a>
-						</li>
-						<li>
-							<a tabindex="-1" href="<?php echo base_url(); ?>laporan/laporan_kategori_intruksi">Kategori Intruksi</a>
+							<a tabindex="-1" href="<?php echo base_url(); ?>template-sms/index">Template SMS</a>
 						</li>
 					</ul>
 				</li>

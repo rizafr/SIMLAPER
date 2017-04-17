@@ -17,7 +17,8 @@ if ($mode == "edt" || $mode == "act_edt") {
 <div class="navbar navbar-inverse">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">Klasifikasi Surat
+            <a class="navbar-brand" href="#">
+                Data Kader
             </a>
         </div>
     </div><!-- /.container -->
@@ -39,13 +40,13 @@ if ($mode == "edt" || $mode == "act_edt") {
             <tr>
                 <td width="20%">Telepon</td>
                 <td>
-                    <input type="text" name="phoneNumber" required value="<?php echo $phoneNumber; ?>" style="width: 700px" class="form-control" autofocus>
+                    <input type="text" name="phoneNumber" required value="<?php echo $phoneNumber; ?>" style="width: 700px" class="form-control">
                 </td>
             </tr>
             <tr>
                 <td width="20%">RW</td>
                 <td>
-                    <input type="text" name="rw" required value="<?php echo $rw; ?>" style="width: 700px" class="form-control" autofocus>
+                    <input type="text" name="rw" required value="<?php echo $rw; ?>" style="width: 700px" class="form-control">
                 </td>
             </tr>
         </table>

@@ -5,7 +5,7 @@
 			<div class="navbar navbar-inverse animated ">
 				<div class="container">
 					<div class="navbar-header">
-						<a class="navbar-brand" href="#">Sifat Surat </a>
+						<a class="navbar-brand" href="#">Data Kader</a>
 					</div>
 					<div class="navbar-collapse collapse navbar-inverse-collapse" style="margin-right: -20px">
 						<ul class="nav navbar-nav">
