@@ -2,6 +2,11 @@
 
 class Servicesms extends CI_Controller {
     
+    const REGISTER = 1;
+    const UPDATE = 2;
+
+    private $_type = ['undefined', 'KADER', 'PASIEN'];
+
     function __construct() {
         parent::__construct();
         $this->load->model('sendsms');
@@ -12,7 +17,10 @@ class Servicesms extends CI_Controller {
 //        nothing todo
     }
 
-
+    /**
+     * Register function
+     * @return void
+     */
     public function register()
     {
         $sender =  $_GET["sender"];
@@ -30,46 +38,68 @@ class Servicesms extends CI_Controller {
         
         $arrayContent = explode("#", $content);
         
-        if (count($arrayContent) < 4 || count($arrayContent) > 5) {
+        if (count($arrayContent) < 3 || count($arrayContent) > 4) {
             $repliedText = "Maaf FORMAT REGISTRASI SALAH, mohon periksa dan ulangi registrasi";
             $this->sendResponse($sender, $repliedText);
+            return;
         }
-        
-        $nama = trim(strtoupper($$arrayContent[1]));
-        $rw = trim(strtoupper($$arrayContent[2]));
-        $status = trim($$arrayContent[3]);
+ 
+        if (count($arrayContent) === 4) {
+            $this->registerNewUser(sendsms::PASIEN_TYPE, $sender, $arrayContent);
+        } else {
+            $this->registerNewUser(sendsms::KADER_TYPE, $sender, $arrayContent);
+        }
+    }
+
+    private function registerNewUser($type, $sender, $arrayContent)
+    {
+        $isExist = $this->sendsms->existUser($type, $sender);
+        if (!empty($isExist)) {
+            $repliedText = "Maaf, notelp ".$sender." telah terdaftar sebelumnya atas nama " . $isExist->name;
+            $this->sendResponse($sender, $repliedText);
+        } else {
+            $datasource = $this->structedSource(self::REGISTER, $type, $sender, $arrayContent);
+            $isSaved = $this->sendsms->registerUser($type, $datasource);
+            if($isSaved) {
+                $repliedText = "Terima kasih, Sdr. ".$datasource['name']." telah terdaftar sebagai ".$this->_type[$type];
+                $this->sendResponse($sender, $repliedText);
+                return;
+            } 
+            $repliedText = "Maaf, Sdr. ".$datasource['name']." GAGAL tersimpan, silahkan coba lagi";
+            $this->sendResponse($sender, $repliedText);
+        }
+    }
+    
+    private function structedSource($statusType, $type, $sender, $arrayContent)
+    {
+        $dateTime = date("Y-m-d H:i:s");
+        $nama = trim(strtoupper($arrayContent[0]));
+        $rw = trim(strtoupper($arrayContent[1]));
+        $status = trim($arrayContent[2]);
         $datasource = array(
             "name" => $nama,
             "phoneNumber" => $sender,
             "rw" => $rw,
             "status" => $status,
-            "createdTime" => $dateTime,
-            "createdBy" => "smsgateway"
         );
-        if (count($arrayContent) > 4) {
-            $isExist = $this->Sendsms->existUser(Sendsms::PASIEN_TYPE, $sender);
-            if ($isExist) {
-                $repliedText = "Maaf, no ".$sender." telah terdaftar sebelumnya atas nama " . $nama;
-                $this->sendResponse($sender, $repliedText);
-            } else {
-                $age = trim($$arrayContent[4]);
-                $datasource["age"] = $age;
-                $isSaved = $this->Sendsms->registerUser(Sendsms::PASIEN_TYPE, $datasource);
-                if($isSaved) {
-                    $repliedText = "Terima kasih, Sdr. ".$nama." telah terdaftar sebagai PASIEN";
-                    $this->sendResponse($sender, $repliedText);
-                } else {
-                    $repliedText = "Maaf, Sdr. ".$nama." GAGAL tersimpan, silahkan coba lagi";
-                    $this->sendResponse($sender, $repliedText);
-                }
-            }
-        } else {
-            $isSaved = $this->Sendsms->registerUser(Sendsms::KADER_TYPE, $datasource);
-            $repliedText = "Terima kasih, Sdr. ".$nama." telah terdaftar sebagai KADER";
-            $this->sendResponse($sender, $repliedText);
+        
+        if ($statusType == self::REGISTER) {
+            $datasource["createdTime"] = $dateTime;
+            $datasource["createdBy"] = "smsgateway";
         }
+
+        if ($type == Sendsms::PASIEN_TYPE) {
+            $age = trim($arrayContent[3]);
+            $datasource["age"] = $age;
+        }
+        
+        return $datasource;
     }
-    
+
+    /**
+     * Update function
+     * @return void
+     */
     public function update()
     {
         $sender =  $_GET["sender"];
@@ -87,36 +117,31 @@ class Servicesms extends CI_Controller {
         
         $arrayContent = explode("#", $content);
         
-        if (count($arrayContent) < 4 || count($arrayContent) > 5) {
+        if (count($arrayContent) < 3 || count($arrayContent) > 4) {
             $repliedText = "Maaf FORMAT UPDATE SALAH, mohon periksa dan ulangi update";
             $this->sendResponse($sender, $repliedText);
+            return;
         }
-        
-        $nama = trim(strtoupper($$arrayContent[1]));
-        $rw = trim(strtoupper($$arrayContent[2]));
-        $status = trim($$arrayContent[3]);
-        $datasource = array(
-            "name" => $nama,
-            "phoneNumber" => $sender,
-            "rw" => $rw,
-            "status" => $status,
-        );
-        $isExist = $this->Sendsms->existUser(Sendsms::PASIEN_TYPE, $sender);
+
+        if (count($arrayContent) === 4) {
+            $this->updateUser(sendsms::PASIEN_TYPE, $sender, $arrayContent);
+        } else {
+            $this->updateUser(sendsms::KADER_TYPE, $sender, $arrayContent);
+        }
+    }
+    
+    private function updateUser($type, $sender, $arrayContent)
+    {
+        $isExist = $this->sendsms->existUser($type, $sender);
         if ($isExist) {
-            if (count($arrayContent) > 4) {
-                $age = trim($$arrayContent[4]);
-                $datasource["age"] = $age;
-                $isSaved = $this->Sendsms->updateUser($isExist->id, Sendsms::PASIEN_TYPE, $datasource);
-                if($isSaved) {
-                    $repliedText = "Terima kasih,data Sdr. ".$nama." telah diperbaharui";
-                    $this->sendResponse($sender, $repliedText);
-                } else {
-                    $repliedText = "Maaf, Sdr. ".$nama." GAGAL tersimpan, silahkan coba lagi";
-                    $this->sendResponse($sender, $repliedText);
-                }
+            $datasource = $this->structedSource(self::UPDATE, $type, $sender, $arrayContent);
+            $isSaved = $this->sendsms->updateUserData($isExist->id, $type, $datasource);
+            if($isSaved === true) {
+                $repliedText = "Terima kasih,data Sdr. ".$datasource['name']." telah diperbaharui";
+                $this->sendResponse($sender, $repliedText);
+                return;
             } else {
-                $isSaved = $this->Sendsms->updateUser($isExist->id, Sendsms::KADER_TYPE, $datasource);
-                $repliedText = "Terima kasih, Sdr. ".$nama." telah diperbaharui";
+                $repliedText = "Maaf, data Sdr. ".$datasource['name'].", GAGAL tersimpan, silahkan coba lagi";
                 $this->sendResponse($sender, $repliedText);
             }
         } else {
@@ -125,6 +150,10 @@ class Servicesms extends CI_Controller {
         }
     }
     
+    /**
+     * Broadcast function
+     * @return void
+     */
     public function broadcast()
     {
         $sender =  $_GET["sender"];
@@ -141,34 +170,30 @@ class Servicesms extends CI_Controller {
         ));
         
         $arrayContent = explode("#", $content);
-        
+
         if (count($arrayContent) < 2 || count($arrayContent) > 2) {
-            $repliedText = "Maaf FORMAT Broadcast SALAH, mohon periksa dan ulangi broadcast";
-            $this->sendResponse($sender, $repliedText);
+            $repliedText = "Maaf FORMAT Broadcast SALAH, mohon periksa dan ulangi kembali";
+            return $this->sendResponse($sender, $repliedText);
         }
         
-        $rw = trim(strtoupper($$arrayContent[0]));
-        $messages = trim(strtoupper($$arrayContent[1]));
-        $datasource = array(
-            "datetime" => $dateTime,
-            "sender" => $sender,
-            "rwNumber" => $rw,
-            "message" => $messages,
-        );
-        $isExist = $this->Sendsms->existUser(Sendsms::KADER_TYPE, $sender);
+        $rw = trim(strtoupper($arrayContent[0]));
+        $messages = trim($arrayContent[1]);
+        $isExist = $this->sendsms->existUser(sendsms::KADER_TYPE, $sender);
         if ($isExist) {
-            $pasiens = $this->Sendsms->getRwPasien($rw);
-            if ($pasiens) {
-                $datasource = array(
-                    "datetime" => $dateTime,
-                    "sender" => $sender,
-                    "rwNumber" => $rw,
-                    "message" => $messages
-                );
-                $this->Sendsms->saveReport();
-                foreach ($pasiens as $pasien) {
-                    $this->sendResponse($pasien['phoneNumber'], $messages);
-                }
+            $pasiens = $this->sendsms->getRwPasien($rw);
+            if (empty($pasiens)) {
+                $repliedText = "Maaf, tidak ditemukan pasien terdaftar di RW".$rw;
+                return $this->sendResponse($sender, $repliedText);
+            }
+            $datasource = array(
+                "datetime" => $dateTime,
+                "sender" => $sender,
+                "rwNumber" => $rw,
+                "message" => $messages
+            );
+            $this->sendsms->saveReport($datasource);
+            foreach ($pasiens as $pasien) {
+                $this->sendResponse($pasien['phoneNumber'], $messages);
             }
         } else {
             $repliedText = "Maaf, tidak dapat melakukan proses,".$sender." tidak terdaftar terdaftar";
@@ -178,7 +203,7 @@ class Servicesms extends CI_Controller {
 
     private function sendResponse($sender, $repliedText)
     {
-        $this->Sendsms->response($sender, $repliedText);
+        $this->sendsms->response($sender, $repliedText);
         echo $repliedText;
     }
 }

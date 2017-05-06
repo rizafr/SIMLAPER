@@ -13,8 +13,8 @@ class Sendsms extends CI_Model {
     
     public function existUser($type, $phoneNumber)
     {
-        $this->db->select("name");
-        if ($type == self::KADER_TYPE) {
+        $this->db->select("id, name");
+        if ($type === self::KADER_TYPE) {
             $this->db->from("kader");
         } else {
             $this->db->from("pasien");
@@ -59,8 +59,8 @@ class Sendsms extends CI_Model {
     }
     
     public function registerUser($type, $datasource) {
-        if ($type == self::KADER_TYPE) {
-            $this->saveKader($datasource);
+        if ($type === self::KADER_TYPE) {
+            return $this->saveKader($datasource);
         }
         $this->db->insert('pasien', $datasource);
         return $this->db->insert_id();
@@ -71,9 +71,9 @@ class Sendsms extends CI_Model {
         return $this->db->insert_id();
     }
     
-    public function updateUser($id, $type, $datasource) {
-        if ($type == self::KADER_TYPE) {
-            $this->updateKader($id, $datasource);
+    public function updateUserData($id, $type, $datasource) {
+        if ($type === self::KADER_TYPE) {
+            return $this->updateKader($id, $datasource);
         }
         $this->db->where('id', $id);
         return $this->db->update('pasien', $datasource);
@@ -89,31 +89,37 @@ class Sendsms extends CI_Model {
         return $this->db->insert_id();
     }
 
+    /**
+     * Send via Sms
+     * @param type $host
+     * @param type $port
+     * @param type $username
+     * @param type $password
+     * @param type $phoneNoRecip
+     * @param type $msgText
+     * @return string
+     */
     public function response($host = "127.0.0.1", $port = "8800", $username = null, $password = null, $phoneNoRecip, $msgText) {
-    	$fp = fsockopen($host, $port, $errno, $errstr);
-    	if (!$fp) {
-    		echo "errno: $errno \n";
-    		echo "errstr: $errstr\n";
-    		return $result;
-    	}
+        $fp = fsockopen($host, $port, $errno, $errstr);
+        if (!$fp) {
+            echo "errno: $errno \n";
+            echo "errstr: $errstr\n";
+            return $result;
+        }
     	
-    	fwrite($fp, "GET /?Phone=" . rawurlencode($phoneNoRecip) . "&Text=" . rawurlencode($msgText) . " HTTP/1.0\n");
-    	if ($username != "") {
-    			$auth = $username . ":" . $password;
-    				$auth = base64_encode($auth);
-    				fwrite($fp, "Authorization: Basic " . $auth . "\n");
-    			}
-    fwrite($fp, "\n");
-    	
-    			$res = "";
-    	
-    			while(!feof($fp)) {
-    				$res .= fread($fp,1);
-    			}
-    			fclose($fp);
-    	
-    	
-    			return $res;
+        fwrite($fp, "GET /?Phone=" . rawurlencode($phoneNoRecip) . "&Text=" . rawurlencode($msgText) . " HTTP/1.0\n");
+        if ($username != "") {
+            $auth = $username . ":" . $password;
+            $auth = base64_encode($auth);
+            fwrite($fp, "Authorization: Basic " . $auth . "\n");
+        }
+        fwrite($fp, "\n");
+        $res = "";
+        while(!feof($fp)) {
+            $res .= fread($fp,1);
+        }
+        fclose($fp);
+        return $res;
     }
 }
 
