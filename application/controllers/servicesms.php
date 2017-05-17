@@ -14,7 +14,10 @@ class Servicesms extends CI_Controller {
     
     public function index()
     {
-//        nothing todo
+//      testing purpose
+        $receiver =  $_GET["receiver"];
+        $messages =  $_GET["message"];
+        $this->sendsms->response($receiver, $messages);
     }
 
     /**

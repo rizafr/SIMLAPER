@@ -10,7 +10,6 @@ Format SMS
 - Siang : *Minumlah obat dengan teratur.*
 
 format registrasi :
-`tipe` => 1 = kader, 2 = pasien
 `nama` => string
 `no_rw` => integer (misal : RW02 = `2`)
 `status` => integer
@@ -19,6 +18,8 @@ format registrasi :
 ------------------
 kader : REG `nama`#`no_rw`#`status`
 pasien : REG `nama`#`no_rw`#`status`#`umur`
+
+kirim ke No tujuan (SMS Center)
 
 format broadcast :
 dari sms :

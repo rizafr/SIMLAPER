@@ -88,38 +88,10 @@ class Sendsms extends CI_Model {
         $this->db->insert('report', $datasource);
         return $this->db->insert_id();
     }
-
-    /**
-     * Send via Sms
-     * @param type $host
-     * @param type $port
-     * @param type $username
-     * @param type $password
-     * @param type $phoneNoRecip
-     * @param type $msgText
-     * @return string
-     */
-    public function response($host = "127.0.0.1", $port = "8800", $username = null, $password = null, $phoneNoRecip, $msgText) {
-        $fp = fsockopen($host, $port, $errno, $errstr);
-        if (!$fp) {
-            echo "errno: $errno \n";
-            echo "errstr: $errstr\n";
-            return $result;
-        }
-    	
-        fwrite($fp, "GET /?Phone=" . rawurlencode($phoneNoRecip) . "&Text=" . rawurlencode($msgText) . " HTTP/1.0\n");
-        if ($username != "") {
-            $auth = $username . ":" . $password;
-            $auth = base64_encode($auth);
-            fwrite($fp, "Authorization: Basic " . $auth . "\n");
-        }
-        fwrite($fp, "\n");
-        $res = "";
-        while(!feof($fp)) {
-            $res .= fread($fp,1);
-        }
-        fclose($fp);
-        return $res;
+    
+    public function response($receive, $messageText)
+    {
+        exec("sudo gammu sendsms TEXT ".$receive." -text ".$messageText);
     }
 }
 
